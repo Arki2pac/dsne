@@ -1,0 +1,140 @@
+// mail: uetake@amu.edu.pl
+
+package cwiki3;
+
+public class Modelasocjacji {
+
+    public static void wyswietl(double[] F,double n){
+		for (int i = 0; i < n; i++)
+		{
+			if ((i%5 == 0) && (i != 0))
+			{
+				System.out.println();
+			}
+			if (F[i] == -1)
+			{
+				System.out.print(" ");
+			}
+			else
+			{
+				System.out.print("*");
+			}
+		}
+	}
+
+	public static void sgn(double[] FZ, double[][] W, double Z1[], double n){
+
+		double wynik = 0.0;
+		for (int i = 0; i < n; i++)
+		{
+			for (int j = 0; j < n; j++)
+			{
+				wynik = wynik + W[i][j] * Z1[j];
+				FZ[i] += wynik;
+				wynik = 0;
+			}
+		}
+		for (int i = 0; i < n; i++)
+        {
+                if (FZ[i] > 0)
+                    FZ[i] = 1;
+                else
+                    FZ[i] = -1;
+        }
+	}
+
+	public static void pomnozwektor(double[][] W, double[] Z0, double[] Z1, double n){
+		for (int i = 0; i < n; i++)
+		{
+			for (int j = 0; j < n; j++)
+			{
+				W[i][j] = ((Z0[i]*Z0[j])/n) + ((Z1[i]*Z1[j])/n);
+			}
+		}
+	}
+
+	public static void main(String[] args) {
+
+		int wielkosc = 25;
+		double[][] W = new double[25][25];
+		double[][] W1 = new double[25][25];
+	    for ( int i=0;i<25;i++)
+	    {
+	        for ( int j=0;j<25;j++)
+	        {
+	            W[i][j]=0.0;
+	            W1[i][j]=0.0;
+	        }
+	    }
+
+		double[] Z0 = {-1.0,-1.0,-1.0,-1.0,-1.0,
+					   -1.0,1.0,1.0,1.0,-1.0,
+					   -1.0,1.0,-1.0,1.0,-1.0,
+					   -1.0,1.0,1.0,1.0,-1.0,
+					   -1.0,-1.0,-1.0,-1.0,-1.0};
+
+		double[] Z1 = {-1.0,-1.0,-1.0,-1.0,-1.0,
+					   -1.0,1.0,1.0,-1.0,-1.0,
+					   -1.0,-1.0,1.0,-1.0,-1.0,
+					   -1.0,-1.0,1.0,-1.0,-1.0,
+					   -1.0,-1.0,-1.0,-1.0,-1.0};
+
+		double[] zaburzenieZ0 = {-1.0,1.0,1.0,1.0,-1.0,
+								 -1.0,1.0,-1.0,1.0,-1.0,
+								 -1.0,1.0,-1.0,1.0,-1.0,
+								 -1.0,1.0,1.0,1.0,-1.0,
+								 -1.0,-1.0,-1.0,-1.0,-1.0};
+
+		double[] zaburzenieZ1 = {-1.0,-1.0,1.0,-1.0,-1.0,
+								 -1.0,-1.0,1.0,-1.0,-1.0,
+								 -1.0,-1.0,1.0,-1.0,-1.0,
+								 -1.0,-1.0,1.0,-1.0,-1.0,
+								 -1.0,-1.0,1.0,-1.0,-1.0};
+
+
+		double[] FZ0 = new double[wielkosc];
+	    double[] FZ1 = new double[wielkosc];
+	    double[] Fzaburzenie0 = new double[wielkosc];
+	    double[] Fzaburzenie1 = new double[wielkosc];
+	    double n=25;
+
+	    System.out.println("Z0: ");
+	    wyswietl(Z0,n);
+
+	    System.out.println();
+	    System.out.println("Z1: ");
+	    wyswietl(Z1,n);
+
+
+	    //SGN
+
+	    pomnozwektor(W, Z0, Z1, n);
+
+	    System.out.println("\n\n\nsgn(W*Z0) = \n");
+
+        sgn(FZ0, W, Z0, n);
+        wyswietl(FZ0,n);
+
+
+        sgn(FZ1, W, Z1, n);
+        System.out.println("\nsgn(W*Z1) = \n");
+        wyswietl(FZ1,n);
+        ////////////////////////////////////////////////////////////
+        System.out.println("Zaburzenie 0 =");
+        wyswietl(zaburzenieZ0,n);
+
+
+        System.out.println("Zaburzenie 1 =");
+        wyswietl(zaburzenieZ1,n);
+
+        pomnozwektor(W1, zaburzenieZ0, zaburzenieZ1, n);
+
+        sgn(Fzaburzenie0, W, zaburzenieZ0, n);
+        System.out.println("SGN(W * Z0' - zaburzone) =");
+        wyswietl(Fzaburzenie0,n);
+
+        sgn(Fzaburzenie1, W, zaburzenieZ1, n);
+        System.out.println("SGN(W * Z1' - zaburzone) =");
+        wyswietl(Fzaburzenie1,n);
+	}
+}
